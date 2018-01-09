@@ -1,5 +1,4 @@
 resource "aws_iam_role" "lambda-ebs-backup" {
-    provider           = "aws.${var.region}"
     name               = "lambda-ebs-backup"
     assume_role_policy = <<EOF
 {
@@ -18,7 +17,6 @@ resource "aws_iam_role" "lambda-ebs-backup" {
 EOF
 }
 resource "aws_iam_policy" "ebs-backup-worker" {
-    provider    = "aws.${var.region}"
     name        = "ebs-backup-worker"
     description = "ebs-backup-worker"
     policy      = <<EOF
@@ -63,7 +61,6 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "describe-attach" {
-    provider   = "aws.${var.region}"
     role       = "${aws_iam_role.lambda-ebs-backup.name}"
     policy_arn = "${aws_iam_policy.ebs-backup-worker.arn}"
 }

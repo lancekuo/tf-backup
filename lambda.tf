@@ -1,5 +1,4 @@
 resource "aws_lambda_function" "ebs-backup-create" {
-    provider         = "aws.${var.region}"
     filename         = "${path.module}/lambda/createSnapshot/createSnapshot.zip"
     function_name    = "createSnapshot"
     role             = "${aws_iam_role.lambda-ebs-backup.arn}"
@@ -15,7 +14,6 @@ resource "aws_lambda_function" "ebs-backup-create" {
     }
 }
 resource "aws_lambda_function" "ebs-backup-delete" {
-    provider         = "aws.${var.region}"
     filename         = "${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"
     function_name    = "deleteSnapshot"
     role             = "${aws_iam_role.lambda-ebs-backup.arn}"
