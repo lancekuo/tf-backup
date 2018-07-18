@@ -29,3 +29,20 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_EBSToSnapshotCleanup"
     principal     = "events.amazonaws.com"
     source_arn    = "${aws_cloudwatch_event_rule.every_day.arn}"
 }
+
+resource "aws_cloudwatch_log_group" "createSnapshot" {
+    name = "/aws/lambda/createSnapshot"
+
+    tags {
+        Environment = "${terraform.workspace}"
+        Project     = "${var.project}"
+    }
+}
+resource "aws_cloudwatch_log_group" "deleteSnapshot" {
+    name = "/aws/lambda/deleteSnapshot"
+
+    tags {
+        Environment = "${terraform.workspace}"
+        Project     = "${var.project}"
+    }
+}

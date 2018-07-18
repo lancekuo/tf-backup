@@ -12,6 +12,11 @@ resource "aws_lambda_function" "ebs-backup-create" {
             Project = "${var.project}"
         }
     }
+
+    tags {
+        Environment = "${terraform.workspace}"
+        Project     = "${var.project}"
+    }
 }
 resource "aws_lambda_function" "ebs-backup-delete" {
     filename         = "${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"
@@ -25,5 +30,10 @@ resource "aws_lambda_function" "ebs-backup-delete" {
         variables = {
             Source = "Terraform"
         }
+    }
+
+    tags {
+        Environment = "${terraform.workspace}"
+        Project     = "${var.project}"
     }
 }
