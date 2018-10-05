@@ -31,7 +31,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_EBSToSnapshotCleanup"
 }
 
 resource "aws_cloudwatch_log_group" "createSnapshot" {
-    name = "/aws/lambda/createSnapshot"
+    name = "/lambda/${aws_lambda_function.ebs-backup-create.function_name}"
 
     tags {
         Environment = "${terraform.workspace}"
@@ -39,7 +39,7 @@ resource "aws_cloudwatch_log_group" "createSnapshot" {
     }
 }
 resource "aws_cloudwatch_log_group" "deleteSnapshot" {
-    name = "/aws/lambda/deleteSnapshot"
+    name = "/lambda/${aws_lambda_function.ebs-backup-delete.function_name}"
 
     tags {
         Environment = "${terraform.workspace}"

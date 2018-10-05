@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "ebs-backup-create" {
     filename         = "${path.module}/lambda/createSnapshot/createSnapshot.zip"
-    function_name    = "createSnapshot"
+    function_name    = "createSnapshotBackup"
     role             = "${aws_iam_role.lambda-ebs-backup.arn}"
     handler          = "createSnapshot.lambda_handler"
     source_code_hash = "${base64sha256(file("${path.module}/lambda/createSnapshot/createSnapshot.zip"))}"
@@ -8,7 +8,7 @@ resource "aws_lambda_function" "ebs-backup-create" {
 
     environment {
         variables = {
-            Source  = "Terraform"
+            Source  = "${terraform.workspace}"
             Project = "${var.project}"
         }
     }
@@ -20,7 +20,7 @@ resource "aws_lambda_function" "ebs-backup-create" {
 }
 resource "aws_lambda_function" "ebs-backup-delete" {
     filename         = "${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"
-    function_name    = "deleteSnapshot"
+    function_name    = "deleteSnapshotBackup"
     role             = "${aws_iam_role.lambda-ebs-backup.arn}"
     handler          = "deleteSnapshot.lambda_handler"
     source_code_hash = "${base64sha256(file("${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"))}"
@@ -28,7 +28,8 @@ resource "aws_lambda_function" "ebs-backup-delete" {
 
     environment {
         variables = {
-            Source = "Terraform"
+            Source = "${terraform.workspace}"
+            Project = "${var.project}"
         }
     }
 

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda-ebs-backup" {
-    name               = "lambda-ebs-backup"
+    name               = "lambda-ebs-access"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -17,7 +17,7 @@ resource "aws_iam_role" "lambda-ebs-backup" {
 EOF
 }
 resource "aws_iam_policy" "ebs-backup-worker" {
-    name        = "ebs-backup-worker"
+    name        = "ebs-backup"
     description = "ebs-backup-worker"
     policy      = <<EOF
 {
