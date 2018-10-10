@@ -1,10 +1,21 @@
+data "archive_file" "createSnapshot_zip" {
+    type        = "zip"
+    source_file = "${path.module}/lambda-go/createSnapshot/main"
+    output_path = "${path.module}/lambda-go/createSnapshot/main.zip"
+}
+data "archive_file" "deleteSnapshot_zip" {
+    type        = "zip"
+    source_file = "${path.module}/lambda-go/deleteSnapshot/main"
+    output_path = "${path.module}/lambda-go/deleteSnapshot/main.zip"
+}
+
 resource "aws_lambda_function" "ebs-backup-create" {
-    filename         = "${path.module}/lambda/createSnapshot/createSnapshot.zip"
-    function_name    = "createSnapshotBackup"
+    filename         = "${path.module}/lambda-go/createSnapshot/main.zip"
+    function_name    = "createSnapshotEbs"
     role             = "${aws_iam_role.ebs_backup.arn}"
-    handler          = "createSnapshot.lambda_handler"
-    source_code_hash = "${base64sha256(file("${path.module}/lambda/createSnapshot/createSnapshot.zip"))}"
-    runtime          = "python2.7"
+    handler          = "main"
+    source_code_hash = "${data.archive_file.createSnapshot_zip.output_base64sha256}"
+    runtime          = "go1.x"
 
     environment {
         variables = {
@@ -19,12 +30,12 @@ resource "aws_lambda_function" "ebs-backup-create" {
     }
 }
 resource "aws_lambda_function" "ebs-backup-delete" {
-    filename         = "${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"
-    function_name    = "deleteSnapshotBackup"
+    filename         = "${path.module}/lambda-go/deleteSnapshot/main.zip"
+    function_name    = "deleteSnapshotEbs"
     role             = "${aws_iam_role.ebs_backup.arn}"
-    handler          = "deleteSnapshot.lambda_handler"
-    source_code_hash = "${base64sha256(file("${path.module}/lambda/deleteSnapshot/deleteSnapshot.zip"))}"
-    runtime          = "python2.7"
+    handler          = "main"
+    source_code_hash = "${data.archive_file.deleteSnapshot_zip.output_base64sha256}"
+    runtime          = "go1.x"
 
     environment {
         variables = {
