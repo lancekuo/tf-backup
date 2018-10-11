@@ -27,12 +27,11 @@ resource "aws_iam_policy" "ebs_backup" {
         {
             "Effect": "Allow",
             "Action": [
-                "logs:*"
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
             ],
-            "Resource": [
-                "arn:aws:logs:${var.aws_region}:*:log-group:${var.awslog_base_path}/*:*:*",
-                "arn:aws:logs:${var.aws_region}:*:log-group:${var.awslog_base_path}/*"
-            ]
+            "Resource": "arn:aws:logs:*:*:*"
         },
         {
             "Effect": "Allow",

@@ -15,8 +15,11 @@ resource "aws_cloudwatch_event_target" "cleanup_every_day" {
     arn       = "${aws_lambda_function.ebs-backup-delete.arn}"
 }
 
+# Those 2 lambda script are able to create log_stream on the fly, but delete the resource.
+# The resaon that I put here is, it could be managed by terraform among apply and desctroy sub command
+# Prefix /aws/lambda is default value
 resource "aws_cloudwatch_log_group" "createSnapshot" {
-    name = "${var.awslog_base_path}/${aws_lambda_function.ebs-backup-create.function_name}"
+    name = "/aws/lambda/${aws_lambda_function.ebs-backup-create.function_name}"
 
     tags {
         Environment = "${terraform.workspace}"
@@ -24,7 +27,7 @@ resource "aws_cloudwatch_log_group" "createSnapshot" {
     }
 }
 resource "aws_cloudwatch_log_group" "deleteSnapshot" {
-    name = "${var.awslog_base_path}/${aws_lambda_function.ebs-backup-delete.function_name}"
+    name = "/aws/lambda/${aws_lambda_function.ebs-backup-delete.function_name}"
 
     tags {
         Environment = "${terraform.workspace}"
